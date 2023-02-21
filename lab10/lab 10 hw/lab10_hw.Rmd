@@ -97,28 +97,45 @@ deserts %>%
 7. [Dipodomys merriami](https://en.wikipedia.org/wiki/Merriam's_kangaroo_rat) is the most frequently sampled animal in the study. How have the number of observations of this species changed over the years included in the study?
 
 ```{r}
-
+deserts %>%
+  filter(species=="merriami") %>%
+  group_by(year) %>%
+  count(year)
+  
 ```
 
+The observations seemed to spike at certain times between the first year recorded and the 14th year recorded out of 26 years total. There was also a major spike around the 18th year to 22nd year, but overall the trend was downwards past the second half.
 
 8. What is the relationship between `weight` and `hindfoot` length? Consider whether or not over plotting is an issue.
 
 ```{r}
-
+deserts %>%
+  ggplot(aes(x=weight,y=hindfoot_length))+geom_point(na.rm=T)
 ```
 
 
 9. Which two species have, on average, the highest weight? Once you have identified them, make a new column that is a ratio of `weight` to `hindfoot_length`. Make a plot that shows the range of this new ratio and fill by sex.
 
 ```{r}
+deserts$weight=as.integer(deserts$weight)
+deserts %>%
+  group_by(species) %>%
+  summarize(mean_weight=mean(weight,na.rm=T))
+```
+Albigula and Spectabilis
 
+```{r}
+deserts %>%
+  ggplot(aes(x=weight,y=hindfoot_length), fill = sex)+geom_boxplot(na.rm=T)+coord_flip()
 ```
 
 
 10. Make one plot of your choice! Make sure to include at least two of the aesthetics options you have learned.
 
 ```{r}
-
+deserts %>%
+  group_by(year) %>%
+  ggplot(aes(x=year,y=weight),fill=taxa)+geom_point(na.rm=T)+labs(title="Weight by Year",x="Year",fill="By Taxa")
 ```
 
 
